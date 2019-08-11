@@ -20,15 +20,13 @@ render(mainContent, creatMainNavigationTemplate(), `beforeend`);
 render(mainContent, creatMainSort(), `beforeend`);
 render(mainContent, creatFilmsWrapper(), `beforeend`);
 
-const filmsWrapper = mainContent.querySelector(`.films-list__container`);
+const filmsWrapper = mainContent.querySelectorAll(`.films-list__container`);
 const filmsListWrapper = mainContent.querySelector(`.films-list`);
-const filmsEstraWrapper = mainContent.querySelector(`.films-list--extra`);
-const filmsEstraInner = filmsEstraWrapper.querySelector(`.films-list__container`);
-console.log(filmsEstraWrapper);
 
-new Array(5).fill(``).forEach(() => render(filmsWrapper, creatFilmCardTemplate(), `beforeend`));
+new Array(5).fill(``).forEach(() => render(filmsWrapper[0], creatFilmCardTemplate(), `beforeend`));
+new Array(2).fill(``).forEach(() => render(filmsWrapper[1], creatFilmCardTemplate(), `beforeend`));
+new Array(2).fill(``).forEach(() => render(filmsWrapper[2], creatFilmCardTemplate(), `beforeend`));
 
 
-new Array(2).fill(``).forEach(() => render(filmsEstraInner, creatFilmCardTemplate(), `beforeend`));
 render(filmsListWrapper, creatShowMoreButtonTempate(), `beforeend`);
-// render(mainContent, creatFilmDetailsPopupTempate(), `beforeend`);
+render(mainContent, creatFilmDetailsPopupTempate(), `beforeend`);
