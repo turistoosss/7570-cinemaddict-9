@@ -10,21 +10,32 @@ const arrayDescription = [
   `Lectus varius viverra.Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
 ];
 
-const getRandonDescription = (lengthTags) => {
+const arrayFilmComments = [
+  {
+    img: `images/emoji/smile.png`,
+    text: `Interesting setting and a good cast`,
+    author: `Tim Macoveev`,
+    date: 1
+  },
+  {
+    img: `images/emoji/sleeping.png`,
+    text: `Booooooooooring`,
+    author: `John Doe`,
+    date: 2
+  },
+  {
+    img: `images/emoji/puke.png`,
+    text: `Almost two hours? Seriously?`,
+    author: `John Doe`,
+    date: 4
+  }
+];
+
+const getRandomArray = (lengthTags, array) => {
   let arrayNew = [];
-  new Array(lengthTags).fill(``).forEach(() => arrayNew.push(arrayDescription[Math.floor(Math.random() * arrayDescription.length)]));
+  new Array(lengthTags).fill(``).forEach(() => arrayNew.push(array[Math.floor(Math.random() * array.length)]));
   return arrayNew;
 };
-
-const arrayPosters = [
-  `images/posters/made-for-each-other.png`,
-  `images/posters/popeye-meets-sinbad.png`,
-  `images/posters/sagebrush-trail.jpg`,
-  `images/posters/santa-claus-conquers-the-martians.jpg`,
-  `images/posters/the-dance-of-life.jpg`,
-  `images/posters/the-great-flamarion.jpg`,
-  `images/posters/the-man-with-the-golden-arm.jpg`
-];
 
 export const getFilm = () => ({
   titles: [
@@ -46,22 +57,22 @@ export const getFilm = () => ({
     `Stranger`
   ][Math.floor(Math.random() * 15)],
   comments: [
-    `1`,
-    `2`,
-    `3`,
-    `4`,
-    `5`,
-    `6`,
-    `7`,
-    `8`,
-    `9`,
-    `10`,
-    `11`,
-    `12`,
-    `13`,
-    `14`,
-    `15`,
-    `16`
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116
   ][Math.floor(Math.random() * 15)],
   rating: [
     1,
@@ -88,7 +99,7 @@ export const getFilm = () => ({
     `War`,
     `Action`,
   ][Math.floor(Math.random() * 5)],
-  description: new Set(getRandonDescription(randomInteger(0, 3))),
+  description: new Set(getRandomArray(randomInteger(0, 3), arrayDescription)),
   img: [
     `images/posters/made-for-each-other.png`,
     `images/posters/popeye-meets-sinbad.png`,
@@ -99,7 +110,7 @@ export const getFilm = () => ({
     `images/posters/the-man-with-the-golden-arm.jpg`
   ][randomInteger(0, 5)],
   isHistory: Boolean(Math.round(Math.random())),
-  isWatchlist: Boolean(Math.round(Math.random()))
+  isWatchlist: Boolean(Math.round(Math.random())),
+  isFavorite: Boolean(Math.round(Math.random())),
+  commentsArray: (getRandomArray(randomInteger(1, 3), arrayFilmComments))
 });
-
-console.log(getFilm());

@@ -1,4 +1,4 @@
-export const creatFilmCardTemplate = ({titles,comments, rating,genre, description, img}) => {
+export const creatFilmCardTemplate = ({titles, comments, rating, genre, description, img}) => {
   return `
         <article class="film-card">
             <h3 class="film-card__title">${titles}</h3>
