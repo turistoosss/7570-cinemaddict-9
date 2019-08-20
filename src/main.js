@@ -1,5 +1,6 @@
-import {creatHeaderTemplate} from "./components/saite-header";
-import {creatHeaderProfileTemplate} from "./components/header-profile";
+import {Position, createElement, renderNEW, unrender} from "./components/utils";
+import {HeaderSearch} from "./components/saite-header";
+import {creatHeaderProfileTemplate} from "./components/header-search";
 import {creatMainNavigationTemplate} from "./components/main-navigation";
 import {creatMainSort} from "./components/sort";
 import {creatFilmsWrapper} from "./components/films-wrapper";
@@ -8,6 +9,7 @@ import {creatShowMoreButtonTempate} from "./components/show-more-button";
 import {getFilm} from "./components/data";
 import {footer} from "./components/footer";
 import {creatFilmDetailsPopupTempate} from "./components/films-details-popup";
+
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -28,7 +30,16 @@ const getDataFilms = () => {
 const dataFilms = getDataFilms();
 
 console.log(dataFilms);
-console.log(dataFilms[0].commentsArray);
+
+const renderHeaderUser = (userFilms) => {
+  const search = new HeaderSearch(userFilms);
+  console.log(search.getTemplate());
+
+  //renderNEW(siteMainHeader, search.getElement(), Position.BEFOREEND);
+  renderNEW(siteMainHeader, search.getTemplate(), Position.BEFOREEND);
+};
+renderHeaderUser(15);
+
 
 const getFilmsSort = (attribute) => {
   const arraySort = dataFilms.sort((a, b) => b[attribute] - a[attribute]);
@@ -37,7 +48,6 @@ const getFilmsSort = (attribute) => {
 };
 
 render(siteMainHeader, creatHeaderProfileTemplate(), `beforeend`);
-render(siteMainHeader, creatHeaderTemplate(12), `beforeend`);
 
 const countNavFilms = (attribute) => {
   let countWatchlist = 0;
@@ -98,4 +108,4 @@ filmsShowMore.addEventListener(`click`, onButtonShowMore);
 
 render(mainContent, footer(dataFilms.length), `beforeend`);
 
-render(mainContent, creatFilmDetailsPopupTempate(dataFilms[0]), `beforeend`);
+// render(mainContent, creatFilmDetailsPopupTempate(dataFilms[0]), `beforeend`);
