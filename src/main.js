@@ -33,10 +33,8 @@ console.log(dataFilms);
 
 const renderHeaderUser = (userFilms) => {
   const search = new HeaderSearch(userFilms);
-  console.log(search.getTemplate());
 
-  //renderNEW(siteMainHeader, search.getElement(), Position.BEFOREEND);
-  renderNEW(siteMainHeader, search.getTemplate(), Position.BEFOREEND);
+  renderNEW(siteMainHeader, search.getElement(), Position.BEFOREEND);
 };
 renderHeaderUser(15);
 

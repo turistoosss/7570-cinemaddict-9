@@ -16,8 +16,7 @@ export const renderNEW = (container, element, place) => {
       container.prepend(element);
       break;
     case Position.BEFOREEND:
-      //container.append(element);
-      container.insertAdjacentHTML(`beforeend`, element);
+      container.append(element);
       break;
   }
 };
