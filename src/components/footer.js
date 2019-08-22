@@ -13,12 +13,6 @@ export class Footer {
     return this._element;
   }
 
-  removeElement() {
-    if (this._element) {
-      this._element = null;
-    }
-  }
-
   getTemplate() {
     return `<footer class="footer">
               <section class="footer__logo logo logo--smaller">Cinemaddict</section>

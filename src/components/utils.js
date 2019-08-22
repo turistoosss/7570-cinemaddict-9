@@ -10,7 +10,7 @@ export const createElement = (template) => {
   return newElement.firstChild;
 };
 
-export const renderNEW = (container, element, place) => {
+export const render = (container, element, place) => {
   switch (place) {
     case Position.AFTERBEGIN:
       container.prepend(element);

@@ -1,4 +1,4 @@
-import {createElement, unrender} from "./utils";
+import {createElement} from "./utils";
 
 export class PopUpFilm {
   constructor({titles, comments, rating, genre, description, img, commentsArray}) {
