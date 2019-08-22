@@ -105,21 +105,21 @@ const renderFilm = (filmMock, place) => {
     popUpFilm.removeElement();
   };
 
-  popUpFilm.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onCloseClick);
-
   const onFilmClick = () => {
     render(mainContent, popUpFilm.getElement(), Position.BEFOREEND);
     document.addEventListener(`keydown`, onEscKeyDown);
+    popUpFilm.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onCloseClick);
   };
 
   task.getElement().querySelector(`.film-card__title`).addEventListener(`click`, onFilmClick);
   task.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onFilmClick);
   task.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onFilmClick);
   render(place, task.getElement(), Position.BEFOREEND);
+
 };
 
-const renderFilmsRow = (array, elFirst, elLast, place) => {
-  const arraySlice = array.slice(elFirst, elLast);
+const renderFilmsRow = (array, elementFrom, elementTo, place) => {
+  const arraySlice = array.slice(elementFrom, elementTo);
   arraySlice.forEach((filmMock) => renderFilm(filmMock, place));
 };
 
@@ -127,17 +127,17 @@ renderFilmsRow(dataFilms, 0, 5, filmsWrapperMain);
 renderFilmsRow(getFilmsSort(`rating`), 0, 2, filmsWrapper[1]);
 renderFilmsRow(getFilmsSort(`comments`), 0, 2, filmsWrapper[2]);
 
-let elFirst = 0;
+let elementFrom = 0;
 
 const renderShowMoreButton = () => {
   const showMoreButton = new ShowMoreButton();
 
   const onButtonShowMore = () => {
-    elFirst += FILM_ROW;
-    let elLast = elFirst + FILM_ROW;
-    const arraySliced = sliceFilms(elFirst, elLast);
+    elementFrom += FILM_ROW;
+    let elementTo = elementFrom + FILM_ROW;
+    const arraySliced = sliceFilms(elementFrom, elementTo);
 
-    renderFilmsRow(dataFilms, elFirst, elLast, filmsWrapperMain);
+    renderFilmsRow(dataFilms, elementFrom, elementTo, filmsWrapperMain);
 
     if (arraySliced.length <= FILM_ROW - 1) {
       showMoreButton.getElement().style.display = `none`;
