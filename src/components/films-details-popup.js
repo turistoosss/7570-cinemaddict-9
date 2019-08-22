@@ -1,14 +1,40 @@
-export const creatFilmDetailsPopupTempate = ({titles, comments, rating, genre, description, img, commentsArray}) => {
-  return `
-       <section class="film-details">
-  <form class="film-details__inner" action="" method="get">
+import {createElement} from "./utils";
+
+export class PopUpFilm {
+  constructor({titles, comments, rating, genre, description, img, commentsArray}) {
+    this._titles = titles;
+    this._comments = comments;
+    this._rating = rating;
+    this._genre = genre;
+    this._description = description;
+    this._img = img;
+    this._commentsArray = commentsArray;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    if (this._element) {
+      this._element = null;
+    }
+  }
+
+  getTemplate() {
+    return `<section class="film-details">
+             <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
       <div class="film-details__close">
         <button class="film-details__close-btn" type="button">close</button>
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="${img}" alt="${titles}">
+          <img class="film-details__poster-img" src="${this._img}" alt="${this._titles}">
 
           <p class="film-details__age">18+</p>
         </div>
@@ -16,12 +42,12 @@ export const creatFilmDetailsPopupTempate = ({titles, comments, rating, genre, d
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
-              <h3 class="film-details__title">${titles}</h3>
+              <h3 class="film-details__title">${this._titles}</h3>
               <p class="film-details__title-original">Original: The Great Flamarion</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${rating}</p>
+              <p class="film-details__total-rating">${this._rating}</p>
             </div>
           </div>
 
@@ -53,11 +79,11 @@ export const creatFilmDetailsPopupTempate = ({titles, comments, rating, genre, d
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
               <td class="film-details__cell">
-                <span class="film-details__genre">${genre}</span>            
+                <span class="film-details__genre">${this._genre}</span>            
             </tr>
           </table>
 
-          <p class="film-details__film-description">${Array.from(description).map((item) => `${item}`)}</p>
+          <p class="film-details__film-description">${Array.from(this._description).map((item) => `${item}`)}</p>
         </div>
       </div>
 
@@ -75,10 +101,10 @@ export const creatFilmDetailsPopupTempate = ({titles, comments, rating, genre, d
 
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._comments}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${Array.from(commentsArray).map((item) => `
+        ${Array.from(this._commentsArray).map((item) => `
           <li class="film-details__comment">
             <span class="film-details__comment-emoji">
               <img src="${item.img}" width="55" height="55" alt="emoji">
@@ -127,6 +153,7 @@ export const creatFilmDetailsPopupTempate = ({titles, comments, rating, genre, d
       </section>
     </div>
   </form>
-</section>
+            </section>
 `;
-};
+  }
+}

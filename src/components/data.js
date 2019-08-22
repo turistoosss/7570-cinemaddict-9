@@ -38,6 +38,7 @@ const getRandomArray = (lengthTags, array) => {
 };
 
 export const getFilm = () => ({
+  userFilms: [15],
   titles: [
     `Good People`,
     `The Witcher`,
