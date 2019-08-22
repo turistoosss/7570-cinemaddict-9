@@ -5,6 +5,7 @@ import {MainNavigation} from "./components/main-navigation";
 import {MainSort} from "./components/sort";
 import {FilmsWrapper} from "./components/films-wrapper";
 import {FilmCard} from "./components/card-template";
+import {NoFilms} from "./components/no-films";
 import {ShowMoreButton} from "./components/show-more-button";
 import {getFilm} from "./components/data";
 import {Footer} from "./components/footer";
@@ -109,6 +110,15 @@ const renderFilm = (filmMock, place) => {
     render(mainContent, popUpFilm.getElement(), Position.BEFOREEND);
     document.addEventListener(`keydown`, onEscKeyDown);
     popUpFilm.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onCloseClick);
+
+    popUpFilm.getElement().querySelector(`textarea`)
+      .addEventListener(`focus`, () => {
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      });
+    popUpFilm.getElement().querySelector(`textarea`)
+      .addEventListener(`blur`, () => {
+        document.addEventListener(`keydown`, onEscKeyDown);
+      });
   };
 
   task.getElement().querySelector(`.film-card__title`).addEventListener(`click`, onFilmClick);
@@ -123,7 +133,17 @@ const renderFilmsRow = (array, elementFrom, elementTo, place) => {
   arraySlice.forEach((filmMock) => renderFilm(filmMock, place));
 };
 
-renderFilmsRow(dataFilms, 0, 5, filmsWrapperMain);
+const renderNoFilms = () => {
+  const noFilms = new NoFilms();
+
+  render(filmsWrapperMain, noFilms.getElement(), Position.BEFOREEND);
+};
+
+if (dataFilms) {
+  renderFilmsRow(dataFilms, 0, 5, filmsWrapperMain);
+} else {
+  renderNoFilms();
+}
 renderFilmsRow(getFilmsSort(`rating`), 0, 2, filmsWrapper[1]);
 renderFilmsRow(getFilmsSort(`comments`), 0, 2, filmsWrapper[2]);
 
