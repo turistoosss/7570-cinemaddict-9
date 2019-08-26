@@ -20,19 +20,17 @@ export class BoardController {
   init() {
     render(this._container, this._mainSort.getElement(), Position.BEFOREEND);
     render(this._container, this._filmsWrapper.getElement(), Position.BEFOREEND);
-    console.log(this._arrayFilms);
 
     const filmsMain = this._filmsWrapper.getElement().querySelector(`.films-list`);
     render(filmsMain, this._showMoreButton.getElement(), Position.BEFOREEND);
 
-    //const filmsList = this._filmsWrapper.getElement().querySelector(`.films-main`);
     const filmsWrapper = this._container.querySelectorAll(`.films-list__container`);
 
     this._renderFilmsRow(this._arrayFilms, 0, 5, this._filmsList);
     this._renderFilmsRow(this._getFilmsSort(`rating`), 0, 2, filmsWrapper[1]);
     this._renderFilmsRow(this._getFilmsSort(`comments`), 0, 2, filmsWrapper[2]);
 
-    this._showMoreButton.getElement().addEventListener(`click`, (evt) => this._onButtonShowMore(evt, this._filmsList));
+    this._showMoreButton.getElement().addEventListener(`click`, (evt) => this._onButtonShowMore(evt, this._filmsList, this._arrayFilms));
     this._mainSort.getElement().addEventListener(`click`, (evt) => this._onSortLinkClick(evt));
   }
 
@@ -40,8 +38,6 @@ export class BoardController {
     const films = new FilmCard(filmMock);
     const popUpFilm = new PopUpFilm(filmMock);
     const mainContent = document.querySelector(`.main`);
-    console.log(filmMock);
-    console.log(this._arrayFilms.indexOf(filmMock))
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
@@ -77,9 +73,7 @@ export class BoardController {
   }
 
   _renderFilmsRow(array, elementFrom, elementTo, place) {
-    console.log(array);
     const arraySlice = array.slice(elementFrom, elementTo);
-    console.log(arraySlice);
     arraySlice.forEach((filmMock) => this._renderFilm(filmMock, place));
   }
 
@@ -88,17 +82,18 @@ export class BoardController {
   }
 
   _getFilmsSort(attribute, elFirst, elLast) {
-    const arraySort = this._arrayFilms.sort((a, b) => b[attribute] - a[attribute]);
+    const array = this._arrayFilms;
+    const arraySort = array.slice().sort((a, b) => b[attribute] - a[attribute]);
     return arraySort.slice(elFirst, elLast);
   }
 
-  _onButtonShowMore(evt, place) {
+  _onButtonShowMore(evt, place, array) {
     evt.preventDefault();
     this._elementFrom += this._FILM_ROW;
     let elementTo = this._elementFrom + this._FILM_ROW;
     const arraySliced = this._sliceFilms(this._elementFrom, elementTo);
 
-    this._renderFilmsRow(this._arrayFilms, this._elementFrom, elementTo, place);
+    this._renderFilmsRow(array, this._elementFrom, elementTo, place);
 
     if (arraySliced.length <= this._FILM_ROW - 1) {
       this._showMoreButton.getElement().style.display = `none`;
@@ -108,7 +103,7 @@ export class BoardController {
   _onSortLinkClick(evt) {
     evt.preventDefault();
 
-    console.log(this._arrayFilms);
+    console.log(this._showMoreButton);
 
     if (evt.target.tagName !== `A`) {
       return;
@@ -118,8 +113,10 @@ export class BoardController {
 
     switch (evt.target.dataset.sortType) {
       case `by-rating`:
-        const sortedByRating = this._arrayFilms.sort((a, b) => b[`rating`] - a[`rating`]);
+        const sortedByRating = this._arrayFilms.slice().sort((a, b) => b[`rating`] - a[`rating`]);
         this._renderFilmsRow(sortedByRating, 0, 5, this._filmsList);
+
+        this._showMoreButton.getElement().removeEventListener(`click`, this._onButtonShowMore);
         break;
       case `by-default`:
         console.log(`defailt`);

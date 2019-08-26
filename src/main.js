@@ -2,7 +2,6 @@ import {Position, render, unrender} from "./components/utils";
 import {HeaderUser} from "./components/header-user";
 import {HeaderSearch} from "./components/header-search";
 import {MainNavigation} from "./components/main-navigation";
-import {MainSort} from "./components/sort";
 import {NoFilms} from "./components/no-films";
 import {getFilm} from "./components/data";
 import {Footer} from "./components/footer";
@@ -19,8 +18,6 @@ const getDataFilms = () => {
 };
 
 const dataFilms = getDataFilms();
-
-console.log(dataFilms);
 
 const renderHeaderSearch = () => {
   const search = new HeaderSearch();
