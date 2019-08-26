@@ -4,12 +4,11 @@ import {HeaderSearch} from "./components/header-search";
 import {MainNavigation} from "./components/main-navigation";
 import {MainSort} from "./components/sort";
 import {FilmsWrapper} from "./components/films-wrapper";
-import {FilmCard} from "./components/card-template";
 import {NoFilms} from "./components/no-films";
 import {ShowMoreButton} from "./components/show-more-button";
 import {getFilm} from "./components/data";
 import {Footer} from "./components/footer";
-import {PopUpFilm} from "./components/films-details-popup";
+import {BoardController} from "./controllers/board";
 
 const siteMainHeader = document.querySelector(`.header`);
 const mainContent = document.querySelector(`.main`);
@@ -80,63 +79,26 @@ const renderFilmsWrapper = () => {
 
   render(mainContent, search.getElement(), Position.BEFOREEND);
 };
-renderFilmsWrapper();
+//renderFilmsWrapper();
 
 const filmsWrapperMain = mainContent.querySelector(`.films-main`);
-const filmsListWrapper = mainContent.querySelector(`.films-list`);
+const films = mainContent.querySelector(`.films`);
 const filmsWrapper = mainContent.querySelectorAll(`.films-list__container`);
 
 const sliceFilms = (elFirst, elLast) => {
   return dataFilms.slice(elFirst, elLast);
 };
 
-const renderFilm = (filmMock, place) => {
-  const task = new FilmCard(filmMock);
-  const popUpFilm = new PopUpFilm(filmMock);
-
-  const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      onCloseClick();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
-
-  const onCloseClick = () => {
-    unrender(popUpFilm.getElement());
-    popUpFilm.removeElement();
-  };
-
-  const onFilmClick = () => {
-    render(mainContent, popUpFilm.getElement(), Position.BEFOREEND);
-    document.addEventListener(`keydown`, onEscKeyDown);
-    popUpFilm.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onCloseClick);
-
-    popUpFilm.getElement().querySelector(`textarea`)
-      .addEventListener(`focus`, () => {
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      });
-    popUpFilm.getElement().querySelector(`textarea`)
-      .addEventListener(`blur`, () => {
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-  };
-
-  task.getElement().querySelector(`.film-card__title`).addEventListener(`click`, onFilmClick);
-  task.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onFilmClick);
-  task.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onFilmClick);
-  render(place, task.getElement(), Position.BEFOREEND);
-
-};
 
 const renderFilmsRow = (array, elementFrom, elementTo, place) => {
   const arraySlice = array.slice(elementFrom, elementTo);
-  arraySlice.forEach((filmMock) => renderFilm(filmMock, place));
+  //arraySlice.forEach((filmMock) => renderFilm(filmMock, place));
 };
 
 const renderNoFilms = () => {
   const noFilms = new NoFilms();
 
-  render(filmsWrapperMain, noFilms.getElement(), Position.BEFOREEND);
+  //render(filmsWrapperMain, noFilms.getElement(), Position.BEFOREEND);
 };
 
 if (dataFilms) {
@@ -144,8 +106,14 @@ if (dataFilms) {
 } else {
   renderNoFilms();
 }
-renderFilmsRow(getFilmsSort(`rating`), 0, 2, filmsWrapper[1]);
-renderFilmsRow(getFilmsSort(`comments`), 0, 2, filmsWrapper[2]);
+
+const boardController = new BoardController(mainContent, dataFilms);
+boardController.init();
+
+const filmsListWrapper = mainContent.querySelector(`.films-list`);
+
+//renderFilmsRow(getFilmsSort(`rating`), 0, 2, filmsWrapper[1]);
+//renderFilmsRow(getFilmsSort(`comments`), 0, 2, filmsWrapper[2]);
 
 let elementFrom = 0;
 
@@ -167,7 +135,7 @@ const renderShowMoreButton = () => {
   showMoreButton.getElement().addEventListener(`click`, onButtonShowMore);
   render(filmsListWrapper, showMoreButton.getElement(), Position.BEFOREEND);
 };
-renderShowMoreButton();
+//renderShowMoreButton();
 
 const renderFooter = (films) => {
   const footer = new Footer(films);
