@@ -1,6 +1,6 @@
 import {AbstractComponent} from "./absctract-component";
 
-export class HeaderSearch extends AbstractComponent{
+export class HeaderSearch extends AbstractComponent {
 
   getTemplate() {
     return `<form class="header__search search">
