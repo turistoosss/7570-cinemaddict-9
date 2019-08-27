@@ -1,15 +1,14 @@
-import {Position, render, unrender} from "./components/utils";
+import {Position, render} from "./components/utils";
 import {HeaderUser} from "./components/header-user";
 import {HeaderSearch} from "./components/header-search";
 import {MainNavigation} from "./components/main-navigation";
-import {NoFilms} from "./components/no-films";
 import {getFilm} from "./components/data";
 import {Footer} from "./components/footer";
-import {BoardController} from "./controllers/board";
+import {PageController} from "./controllers/films-controller";
 
 const siteMainHeader = document.querySelector(`.header`);
 const mainContent = document.querySelector(`.main`);
-const FILM_COUNT = 19;
+const FILM_COUNT = 11;
 
 const getDataFilms = () => {
   let arrayFilms = [];
@@ -56,18 +55,9 @@ const renderMainNavigation = (navCountHistory, navCountWatchlist, navCountFavori
 };
 renderMainNavigation(navAmountHistory, navAmountWatchlist, navAmountFavorite);
 
-const renderNoFilms = () => {
-  const noFilms = new NoFilms();
 
-  //render(filmsWrapperMain, noFilms.getElement(), Position.BEFOREEND);
-};
-
-if (dataFilms) {
-  //renderNoFilms();
-}
-
-const boardController = new BoardController(mainContent, dataFilms);
-boardController.init();
+const pageController = new PageController(mainContent, dataFilms);
+pageController.init();
 
 
 const renderFooter = (films) => {

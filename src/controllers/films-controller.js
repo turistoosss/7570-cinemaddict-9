@@ -4,17 +4,20 @@ import {PopUpFilm} from "../components/films-details-popup";
 import {FilmsWrapper} from "../components/films-wrapper";
 import {MainSort} from "../components/sort";
 import {ShowMoreButton} from "../components/show-more-button";
+import {NoFilms} from "../components/no-films";
 
-export class BoardController {
+export class PageController {
   constructor(container, arrayFilms) {
     this._container = container;
     this._arrayFilms = arrayFilms;
+    this._arraySorted = this._arrayFilms;
     this._filmsWrapper = new FilmsWrapper();
     this._filmsList = this._filmsWrapper.getElement().querySelector(`.films-main`);
     this._mainSort = new MainSort();
     this._showMoreButton = new ShowMoreButton();
     this._elementFrom = 0;
     this._FILM_ROW = 5;
+    this._noFilms = new NoFilms();
   }
 
   init() {
@@ -22,7 +25,10 @@ export class BoardController {
     render(this._container, this._filmsWrapper.getElement(), Position.BEFOREEND);
 
     const filmsMain = this._filmsWrapper.getElement().querySelector(`.films-list`);
-    render(filmsMain, this._showMoreButton.getElement(), Position.BEFOREEND);
+
+    if (this._arraySorted.length > this._FILM_ROW) {
+      render(filmsMain, this._showMoreButton.getElement(), Position.BEFOREEND);
+    }
 
     const filmsWrapper = this._container.querySelectorAll(`.films-list__container`);
 
@@ -30,7 +36,7 @@ export class BoardController {
     this._renderFilmsRow(this._getFilmsSort(`rating`), 0, 2, filmsWrapper[1]);
     this._renderFilmsRow(this._getFilmsSort(`comments`), 0, 2, filmsWrapper[2]);
 
-    this._showMoreButton.getElement().addEventListener(`click`, (evt) => this._onButtonShowMore(evt, this._filmsList, this._arrayFilms));
+    this._showMoreButton.getElement().addEventListener(`click`, (evt) => this._onButtonShowMore(evt, this._filmsList, this._arraySorted));
     this._mainSort.getElement().addEventListener(`click`, (evt) => this._onSortLinkClick(evt));
   }
 
@@ -74,11 +80,11 @@ export class BoardController {
 
   _renderFilmsRow(array, elementFrom, elementTo, place) {
     const arraySlice = array.slice(elementFrom, elementTo);
-    arraySlice.forEach((filmMock) => this._renderFilm(filmMock, place));
-  }
-
-  _sliceFilms(elFirst, elLast) {
-    return this._arrayFilms.slice(elFirst, elLast);
+    if (!arraySlice.length) {
+      render(this._filmsList, this._noFilms.getElement(), Position.BEFOREEND);
+    } else {
+      arraySlice.forEach((filmMock) => this._renderFilm(filmMock, place));
+    }
   }
 
   _getFilmsSort(attribute, elFirst, elLast) {
@@ -91,7 +97,7 @@ export class BoardController {
     evt.preventDefault();
     this._elementFrom += this._FILM_ROW;
     let elementTo = this._elementFrom + this._FILM_ROW;
-    const arraySliced = this._sliceFilms(this._elementFrom, elementTo);
+    const arraySliced = array.slice(this._elementFrom, elementTo);
 
     this._renderFilmsRow(array, this._elementFrom, elementTo, place);
 
@@ -102,8 +108,7 @@ export class BoardController {
 
   _onSortLinkClick(evt) {
     evt.preventDefault();
-
-    console.log(this._showMoreButton);
+    this._elementFrom = 0;
 
     if (evt.target.tagName !== `A`) {
       return;
@@ -113,15 +118,19 @@ export class BoardController {
 
     switch (evt.target.dataset.sortType) {
       case `by-rating`:
-        const sortedByRating = this._arrayFilms.slice().sort((a, b) => b[`rating`] - a[`rating`]);
-        this._renderFilmsRow(sortedByRating, 0, 5, this._filmsList);
-
-        this._showMoreButton.getElement().removeEventListener(`click`, this._onButtonShowMore);
+        this._arraySorted = this._arrayFilms.slice().sort((a, b) => b[`rating`] - a[`rating`]);
+        this._renderFilmsRow(this._arraySorted, 0, 5, this._filmsList);
         break;
       case `by-default`:
-        console.log(`defailt`);
-        this._renderFilmsRow(this._arrayFilms, 0, 5, this._filmsList);
+        this._arraySorted = this._arrayFilms;
+        this._renderFilmsRow(this._arraySorted, 0, 5, this._filmsList);
         break;
+    }
+
+    if (this._arraySorted.length <= this._FILM_ROW - 1) {
+      this._showMoreButton.getElement().style.display = `none`;
+    } else {
+      this._showMoreButton.getElement().style.display = `block`;
     }
   }
 }
