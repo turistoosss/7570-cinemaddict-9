@@ -1,30 +1,16 @@
-import {createElement} from "./utils";
+import {AbstractComponent} from "./absctract-component";
 
-export class PopUpFilm {
+export class PopUpFilm extends AbstractComponent {
   constructor({titles, comments, rating, genre, description, img, commentsArray}) {
+    super();
     this._titles = titles;
     this._comments = comments;
+    this._commentsArray = commentsArray;
     this._rating = rating;
     this._genre = genre;
     this._description = description;
     this._img = img;
-    this._commentsArray = commentsArray;
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    if (this._element) {
-      this._element = null;
-    }
-  }
-
   getTemplate() {
     return `<section class="film-details">
              <form class="film-details__inner" action="" method="get">

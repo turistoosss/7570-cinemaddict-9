@@ -1,19 +1,12 @@
-import {createElement} from "./utils";
+import {AbstractComponent} from "./absctract-component";
 
-export class MainSort {
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
+export class MainSort extends AbstractComponent {
 
   getTemplate() {
     return `<ul class="sort">
-                <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-                <li><a href="#" class="sort__button">Sort by date</a></li>
-                <li><a href="#" class="sort__button">Sort by rating</a></li>
+                <li><a href="#" class="sort__button sort__button--active" data-sort-type="by-default">Sort by default</a></li>
+                <li><a href="#" class="sort__button" data-sort-type="by-date">Sort by date</a></li>
+                <li><a href="#" class="sort__button" data-sort-type="by-rating">Sort by rating</a></li>
             </ul>
 `;
   }

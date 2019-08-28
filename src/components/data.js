@@ -58,7 +58,7 @@ export const getFilm = () => ({
     `Stranger`
   ][Math.floor(Math.random() * 15)],
   comments: [
-    11,
+    120,
     12,
     13,
     14,

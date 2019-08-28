@@ -1,18 +1,11 @@
-import {createElement} from "./utils";
+import {AbstractComponent} from "./absctract-component";
 
-export class NoFilms {
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
+export class NoFilms extends AbstractComponent {
 
   getTemplate() {
     return `<div class="no-result">
-        There is no movies for your request.
-      </div>
+                There is no movies for your request.
+            </div>
 `;
   }
 }

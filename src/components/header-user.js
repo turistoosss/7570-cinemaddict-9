@@ -1,7 +1,8 @@
-import {createElement} from "./utils";
+import {AbstractComponent} from "./absctract-component";
 
-export class HeaderUser {
+export class HeaderUser extends AbstractComponent {
   constructor(userRatingName) {
+    super();
     this._userRatingName = userRatingName;
 
     if (userRatingName > 0 && userRatingName <= 10) {
@@ -11,14 +12,6 @@ export class HeaderUser {
     } else if (userRatingName > 20) {
       this._userRatingName = `movie buff`;
     }
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 
   getTemplate() {

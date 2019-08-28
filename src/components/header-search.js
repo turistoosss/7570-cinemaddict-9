@@ -1,13 +1,6 @@
-import {createElement} from "./utils";
+import {AbstractComponent} from "./absctract-component";
 
-export class HeaderSearch {
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
+export class HeaderSearch extends AbstractComponent {
 
   getTemplate() {
     return `<form class="header__search search">

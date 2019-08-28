@@ -1,20 +1,11 @@
-import {createElement} from "./utils";
+import {AbstractComponent} from "./absctract-component";
 
-export class FilmsWrapper {
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
+export class FilmsWrapper extends AbstractComponent {
   getTemplate() {
     return `<section class="films">
             <section class="films-list">
-                <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>      
-              <div class="films-list__container films-main">
-              </div>
+                <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>    
+                <div class="films-list__container films-main"></div>  
             </section>
             <section class="films-list--extra">
               <h2 class="films-list__title">Top rated</h2>
@@ -23,7 +14,7 @@ export class FilmsWrapper {
                <section class="films-list--extra">
                   <h2 class="films-list__title">Most commented</h2>
                  <div class="films-list__container"></div>
-             </section>
+                </section>
           </section>
 `;
   }
