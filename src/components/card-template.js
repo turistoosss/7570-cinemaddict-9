@@ -1,7 +1,7 @@
 import {AbstractComponent} from "./absctract-component";
 
 export class FilmCard extends AbstractComponent {
-  constructor({titles, comments, rating, genre, description, img}) {
+  constructor({titles, comments, rating, genre, description, img, isWatchlist, isHistory, isFavorite}) {
     super();
     this._titles = titles;
     this._comments = comments;
@@ -9,6 +9,9 @@ export class FilmCard extends AbstractComponent {
     this._genre = genre;
     this._description = description;
     this._img = img;
+    this._isWatchlist = isWatchlist;
+    this._isHistory = isHistory;
+    this._isFavorite = isFavorite;
   }
 
   getTemplate() {
@@ -26,9 +29,9 @@ export class FilmCard extends AbstractComponent {
             </p>
             <a class="film-card__comments">${this._comments} comments</a>
             <form class="film-card__controls">
-              <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-              <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
-              <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
+              <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${this._isWatchlist ? `film-card__controls-item--active` : ``}" data-film-type="watchlist">Add to watchlist</button>
+              <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${this._isHistory ? `film-card__controls-item--active` : ``}" data-film-type="watched">Mark as watched</button>
+              <button class="film-card__controls-item button film-card__controls-item--favorite ${this._isFavorite ? `film-card__controls-item--active` : ``}" data-film-type="favorite">Mark as favorite</button>
              </form>
         </article>
 `;

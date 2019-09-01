@@ -15,6 +15,8 @@ export class PageController {
     this._arraySorted = this._arrayFilms;
     this._filmsWrapper = new FilmsWrapper();
     this._filmsList = new FilmsMain();
+    const filmsWrapper = this._container.querySelectorAll(`.films-list__container`);
+
     this._mainSort = new MainSort();
     this._showMoreButton = new ShowMoreButton();
     this._elementFrom = 0;
@@ -33,7 +35,7 @@ export class PageController {
 
     render(filmsMain, this._filmsList.getElement(), Position.BEFOREEND);
 
-    console.log(this._filmsList);
+    console.log(this._arraySorted);
 
     if (this._arraySorted.length > this._FILM_ROW) {
       render(filmsMain, this._showMoreButton.getElement(), Position.BEFOREEND);
@@ -41,7 +43,7 @@ export class PageController {
 
     const filmsWrapper = this._container.querySelectorAll(`.films-list__container`);
 
-    this._renderFilmsRow(this._arrayFilms, 0, 5, this._filmsList.getElement());
+    this._renderFilmsRow(this._arrayFilms, 0, this._FILM_ROW, this._filmsList.getElement());
     this._renderFilmsRow(this._getFilmsSort(`rating`), 0, 2, filmsWrapper[1]);
     this._renderFilmsRow(this._getFilmsSort(`comments`), 0, 2, filmsWrapper[2]);
 
@@ -50,8 +52,8 @@ export class PageController {
   }
 
   _renderFilm(filmMock, place) {
-    const taskController = new MovieController(place, filmMock, this._onChangeView, this._onDataChange);
-    this._subscriptions.push(taskController.setDefaultView.bind(taskController));
+    const taskController = new MovieController(place, filmMock, this._onChangeView, this._onDataChange, this._arraySorted);
+    //this._subscriptions.push(taskController.setDefaultView.bind(taskController));
   }
 
   _renderFilmsRow(array, elementFrom, elementTo, place) {
@@ -73,9 +75,36 @@ export class PageController {
     this._subscriptions.forEach((it) => it());
   }
 
-  _onDataChange(newData, oldData) {
-    this._arraySorted[this._arraySorted.findIndex((it) => it === oldData)] = newData;
-    this._renderBoard(this._arraySorted);
+  _onDataChange(array) {
+    const filmsMain = this._filmsWrapper.getElement().querySelector(`.films-list`);
+    const filmsWrapper = this._container.querySelectorAll(`.films-list__container`);
+    const filmsListExtra = this._container.querySelectorAll(`.films-list--extra`);
+
+    const wrapperExtraDiv = document.createElement(`div`);
+    const wrapperExtraDiv2 = document.createElement(`div`);
+    wrapperExtraDiv.classList.add(`films-list__container`);
+    wrapperExtraDiv2.classList.add(`films-list__container`);
+
+    this._elementFrom = 0;
+    console.log(array);
+    unrender(this._filmsList.getElement());
+    unrender(filmsWrapper[1]);
+    unrender(filmsWrapper[2]);
+
+    this._filmsList.removeElement();
+    this._arraySorted = array;
+
+    render(filmsMain, this._filmsList.getElement(), Position.AFTERBEGIN);
+    render(filmsListExtra[0], wrapperExtraDiv, Position.BEFOREEND);
+    render(filmsListExtra[1], wrapperExtraDiv2, Position.BEFOREEND);
+    const filmsWrapperNew = this._container.querySelectorAll(`.films-list__container`);
+
+    this._renderFilmsRow(this._getFilmsSort(`rating`), 0, 2, filmsWrapperNew[1]);
+    this._renderFilmsRow(this._getFilmsSort(`comments`), 0, 2, filmsWrapperNew[2]);
+    this._renderFilmsRow(this._arraySorted, 0, 5, this._filmsList.getElement());
+    if (array.length > this._FILM_ROW) {
+      this._showMoreButton.getElement().style.display = `block`;
+    }
   }
 
   _onButtonShowMore(evt, place, array) {
@@ -83,8 +112,8 @@ export class PageController {
     this._elementFrom += this._FILM_ROW;
     let elementTo = this._elementFrom + this._FILM_ROW;
     const arraySliced = array.slice(this._elementFrom, elementTo);
-
-    this._renderFilmsRow(array, this._elementFrom, elementTo, place);
+  console.log(array)
+    this._renderFilmsRow(array, this._elementFrom, elementTo, this._filmsList.getElement());
 
     if (arraySliced.length <= this._FILM_ROW - 1) {
       this._showMoreButton.getElement().style.display = `none`;

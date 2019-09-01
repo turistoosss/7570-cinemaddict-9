@@ -111,7 +111,8 @@ export const getFilm = () => ({
     `images/posters/the-man-with-the-golden-arm.jpg`
   ][randomInteger(0, 5)],
   isHistory: Boolean(Math.round(Math.random())),
-  isWatchlist: Boolean(Math.round(Math.random())),
+  //isWatchlist: Boolean(Math.round(Math.random())),
+  isWatchlist: false,
   isFavorite: Boolean(Math.round(Math.random())),
   commentsArray: (getRandomArray(randomInteger(1, 3), arrayFilmComments))
 });

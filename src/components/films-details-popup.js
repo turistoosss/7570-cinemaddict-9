@@ -1,7 +1,7 @@
 import {AbstractComponent} from "./absctract-component";
 
 export class PopUpFilm extends AbstractComponent {
-  constructor({titles, comments, rating, genre, description, img, commentsArray}) {
+  constructor({titles, comments, rating, genre, description, img, commentsArray, isWatchlist, isHistory, isFavorite}) {
     super();
     this._titles = titles;
     this._comments = comments;
@@ -10,6 +10,9 @@ export class PopUpFilm extends AbstractComponent {
     this._genre = genre;
     this._description = description;
     this._img = img;
+    this._isWatchlist = isWatchlist;
+    this._isHistory = isHistory;
+    this._isFavorite = isFavorite;
   }
   getTemplate() {
     return `<section class="film-details">
@@ -74,13 +77,13 @@ export class PopUpFilm extends AbstractComponent {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${this._isWatchlist ? `checked` : ``}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${this._isHistory ? `checked` : ``}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${this._isFavorite ? `checked` : ``}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
