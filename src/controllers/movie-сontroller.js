@@ -44,6 +44,60 @@ export class MovieController {
         .addEventListener(`blur`, () => {
           document.addEventListener(`keydown`, onEscKeyDown);
         });
+
+      this._popUpFilm.getElement().querySelector(`.film-details__controls`)
+        .addEventListener(`change`, (evt) => {
+          evt.preventDefault();
+          let inputName;
+
+          switch (evt.target.name) {
+            case `watchlist`:
+              inputName = `isWatchlist`;
+              break;
+            case `watched`:
+              inputName = `isHistory`;
+              break;
+            case `favorite`:
+              inputName = `isFavorite`;
+              break;
+          }
+
+          this._onFilmControlClick(inputName);
+        });
+
+      this._popUpFilm.getElement().querySelector(`input[name="watchlist"]`)
+        .addEventListener(`click`, (evt) => {
+          console.log(this);
+          console.log(`watchlist click`);
+          if (this._popUpFilm.getElement().querySelector(`input[name="watchlist"]`).checked) {
+            console.log(`watchlist click checked`);
+            this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `block`;
+          } else {
+            this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `none`;
+          }
+        });
+
+      this._popUpFilm.getElement().querySelector(`.film-details__emoji-list`)
+        .addEventListener(`click`, (evt) => {
+          evt.preventDefault();
+
+          if (evt.target.tagName !== `IMG`) {
+            return;
+          }
+
+          const emoji = document.createElement(`img`);
+          const emojiLabel = this._popUpFilm.getElement().querySelector(`.film-details__add-emoji-label`);
+          console.log(emoji)
+          if (emojiLabel.querySelector(`img`)) {
+            emojiLabel.removeChild(emojiLabel.firstChild);
+          }
+
+          render(emojiLabel, emoji, Position.BEFOREEND);
+
+          emoji.src = evt.target.src;
+          emoji.width = 55;
+          emoji.height = 55;
+        });
     };
 
     this._filmkCard .getElement().querySelector(`.film-card__title`).addEventListener(`click`, onOpenPopUp);
@@ -56,32 +110,34 @@ export class MovieController {
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
 
-        const onFilmContoleClik = (attributeName) => {
-          evt.target.classList.add(`film-card__controls-item--active`);
-          console.log(attributeName);
-          console.log(this._filmItem[attributeName]);
-          if (!this._filmItem[attributeName]) {
-            this._filmItem[attributeName] = true;
-          } else {
-            this._filmItem[attributeName] = false;
-          }
-          this._onDataChange(this._mainArray);
-        };
+        let buttonName;
+        evt.target.classList.add(`film-card__controls-item--active`);
 
         switch (evt.target.dataset.filmType) {
           case `watchlist`:
-            onFilmContoleClik(`isWatchlist`);
+            buttonName = `isWatchlist`;
             break;
           case `watched`:
-            onFilmContoleClik(`isHistory`);
+            buttonName = `isHistory`;
             break;
           case `favorite`:
-            onFilmContoleClik(`isFavorite`);
+            buttonName = `isFavorite`;
             break;
         }
+
+        this._onFilmControlClick(buttonName);
       });
 
     render(this._filmList, this._filmkCard .getElement(), Position.BEFOREEND);
+  }
+
+  _onFilmControlClick(attributeName) {
+    if (!this._filmItem[attributeName]) {
+      this._filmItem[attributeName] = true;
+    } else {
+      this._filmItem[attributeName] = false;
+    }
+    this._onDataChange(this._mainArray);
   }
 
   _setDefaultView() {
@@ -89,8 +145,6 @@ export class MovieController {
     const filmDetails = document.querySelector(`.film-details`);
 
     if (mainContent.contains(filmDetails)) {
-      console.log(`unrender`);
-
       unrender(filmDetails);
       this._popUpFilm.removeElement();
     }
