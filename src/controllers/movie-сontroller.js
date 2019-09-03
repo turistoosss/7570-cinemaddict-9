@@ -34,6 +34,10 @@ export class MovieController {
       this._setDefaultView();
       render(mainContent, this._popUpFilm.getElement(), Position.BEFOREEND);
       document.addEventListener(`keydown`, onEscKeyDown);
+      if (this._popUpFilm.getElement().querySelector(`input[name="watched"]`).checked) {
+        this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `block`;
+      }
+
       this._popUpFilm.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onCloseClick);
 
       this._popUpFilm.getElement().querySelector(`textarea`)
@@ -63,14 +67,12 @@ export class MovieController {
           }
 
           this._onFilmControlClick(inputName);
+
         });
 
-      this._popUpFilm.getElement().querySelector(`input[name="watchlist"]`)
+      this._popUpFilm.getElement().querySelector(`input[name="watched"]`)
         .addEventListener(`click`, (evt) => {
-          console.log(this);
-          console.log(`watchlist click`);
-          if (this._popUpFilm.getElement().querySelector(`input[name="watchlist"]`).checked) {
-            console.log(`watchlist click checked`);
+          if (this._popUpFilm.getElement().querySelector(`input[name="watched"]`).checked) {
             this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `block`;
           } else {
             this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `none`;
@@ -87,7 +89,6 @@ export class MovieController {
 
           const emoji = document.createElement(`img`);
           const emojiLabel = this._popUpFilm.getElement().querySelector(`.film-details__add-emoji-label`);
-          console.log(emoji)
           if (emojiLabel.querySelector(`img`)) {
             emojiLabel.removeChild(emojiLabel.firstChild);
           }

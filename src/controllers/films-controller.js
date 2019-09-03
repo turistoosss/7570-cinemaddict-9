@@ -1,6 +1,4 @@
 import {render, unrender, Position} from "../components/utils";
-import {FilmCard} from "../components/card-template";
-import {PopUpFilm} from "../components/films-details-popup";
 import {FilmsWrapper} from "../components/films-wrapper";
 import {MainSort} from "../components/sort";
 import {ShowMoreButton} from "../components/show-more-button";
@@ -15,8 +13,6 @@ export class PageController {
     this._arraySorted = this._arrayFilms;
     this._filmsWrapper = new FilmsWrapper();
     this._filmsList = new FilmsMain();
-    const filmsWrapper = this._container.querySelectorAll(`.films-list__container`);
-
     this._mainSort = new MainSort();
     this._showMoreButton = new ShowMoreButton();
     this._elementFrom = 0;
@@ -53,7 +49,6 @@ export class PageController {
 
   _renderFilm(filmMock, place) {
     const taskController = new MovieController(place, filmMock, this._onChangeView, this._onDataChange, this._arraySorted);
-    //this._subscriptions.push(taskController.setDefaultView.bind(taskController));
   }
 
   _renderFilmsRow(array, elementFrom, elementTo, place) {
@@ -112,7 +107,7 @@ export class PageController {
     this._elementFrom += this._FILM_ROW;
     let elementTo = this._elementFrom + this._FILM_ROW;
     const arraySliced = array.slice(this._elementFrom, elementTo);
-  console.log(array)
+    console.log(array);
     this._renderFilmsRow(array, this._elementFrom, elementTo, this._filmsList.getElement());
 
     if (arraySliced.length <= this._FILM_ROW - 1) {
