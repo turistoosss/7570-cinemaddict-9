@@ -30,15 +30,22 @@ export class MovieController {
       this._popUpFilm.removeElement();
     };
 
-    const onOpenPopUp = () => {
-      this._setDefaultView();
+
+    const onOpenPopUp = (dataItem) => {
+      // this._setDefaultView();
+
+      console.log(`popUp isHistory ` + this._filmItem.isHistory);
+
       render(mainContent, this._popUpFilm.getElement(), Position.BEFOREEND);
       document.addEventListener(`keydown`, onEscKeyDown);
-      if (this._filmItem.isHistory) {
-        this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `block`;
-      }
 
       this._popUpFilm.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onCloseClick);
+
+      if (this._filmItem.isHistory) {
+        this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `block`;
+      } else {
+        this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `none`;
+      }
 
       this._popUpFilm.getElement().querySelector(`textarea`)
         .addEventListener(`focus`, () => {
@@ -47,27 +54,6 @@ export class MovieController {
       this._popUpFilm.getElement().querySelector(`textarea`)
         .addEventListener(`blur`, () => {
           document.addEventListener(`keydown`, onEscKeyDown);
-        });
-
-      this._popUpFilm.getElement().querySelector(`.film-details__controls`)
-        .addEventListener(`change`, (evt) => {
-          evt.preventDefault();
-          let inputName;
-
-          switch (evt.target.name) {
-            case `watchlist`:
-              inputName = `isWatchlist`;
-              break;
-            case `watched`:
-              inputName = `isHistory`;
-              break;
-            case `favorite`:
-              inputName = `isFavorite`;
-              break;
-          }
-
-          this._onFilmControlClick(inputName);
-
         });
 
 
@@ -91,6 +77,8 @@ export class MovieController {
           emoji.width = 55;
           emoji.height = 55;
         });
+
+
     };
 
     this._filmkCard .getElement().querySelector(`.film-card__title`).addEventListener(`click`, onOpenPopUp);
@@ -110,25 +98,52 @@ export class MovieController {
           case `watchlist`:
             buttonName = `isWatchlist`;
             break;
-          // case `watched`:
-          //   buttonName = `isHistory`;
-          //   break;
+          case `watched`:
+            buttonName = `isHistory`;
+            break;
           case `favorite`:
             buttonName = `isFavorite`;
             break;
         }
 
         this._onFilmControlClick(buttonName);
+
       });
 
-    this._popUpFilm.getElement().querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, (evt) => {
-        console.log(`change`);
-        //this._setDefaultView();
-        this._onFilmControlClick(`isHistory`);
-        //onOpenPopUp();
-      });
+    this._popUpFilm.getElement().querySelector(`.film-details__controls`)
+      .addEventListener(`change`, (evt) => {
+        evt.preventDefault();
+        let inputName;
 
+        switch (evt.target.name) {
+          case `watchlist`:
+            inputName = `isWatchlist`;
+            this._onFilmControlClick(inputName);
+            break;
+
+
+          case `watched`:
+            if (!this._filmItem[`isHistory`]) {
+              this._filmItem[`isHistory`] = true;
+            } else {
+              this._filmItem[`isHistory`] = false;
+            }
+
+            // console.log( this._filmItem);
+            console.log(this._mainArray);
+            // this._onDataChange(this._mainArray);
+            this._onDataChange(this._mainArray);
+            onOpenPopUp(this._filmItem);
+            break;
+
+
+          case `favorite`:
+            inputName = `isFavorite`;
+            this._onFilmControlClick(inputName);
+            break;
+        }
+
+      });
     render(this._filmList, this._filmkCard .getElement(), Position.BEFOREEND);
   }
 
@@ -140,6 +155,7 @@ export class MovieController {
     }
     this._setDefaultView();
     this._onDataChange(this._mainArray);
+
   }
 
   _setDefaultView() {
