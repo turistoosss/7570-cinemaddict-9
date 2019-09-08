@@ -15,19 +15,19 @@ const arrayFilmComments = [
     img: `images/emoji/smile.png`,
     text: `Interesting setting and a good cast`,
     author: `Tim Macoveev`,
-    date: 1
+    date: Date.now() - 100 - Math.floor(Math.random() * 7) * 12 * 60 * 60 * 1000,
   },
   {
     img: `images/emoji/sleeping.png`,
     text: `Booooooooooring`,
     author: `John Doe`,
-    date: 2
+    date: Date.now() - 100 - Math.floor(Math.random() * 7) * 12 * 60 * 60 * 1000,
   },
   {
     img: `images/emoji/puke.png`,
     text: `Almost two hours? Seriously?`,
     author: `John Doe`,
-    date: 4
+    date: Date.now() - 100 - Math.floor(Math.random() * 7) * 12 * 60 * 60 * 1000,
   }
 ];
 
@@ -57,6 +57,8 @@ export const getFilm = () => ({
     `Cool Story`,
     `Stranger`
   ][Math.floor(Math.random() * 15)],
+  //dueDate: randomInteger(1975, 2019),
+  dueDate: Date.now() - 100 - Math.floor(Math.random() * 7) * 48 * 60 * 60 * 1000,
   comments: [
     120,
     12,
@@ -111,7 +113,6 @@ export const getFilm = () => ({
     `images/posters/the-man-with-the-golden-arm.jpg`
   ][randomInteger(0, 5)],
   isHistory: Boolean(Math.round(Math.random())),
-  //isWatchlist: Boolean(Math.round(Math.random())),
   isWatchlist: false,
   isFavorite: Boolean(Math.round(Math.random())),
   commentsArray: (getRandomArray(randomInteger(1, 3), arrayFilmComments))

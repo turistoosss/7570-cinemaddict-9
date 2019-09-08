@@ -1,4 +1,5 @@
 import {AbstractComponent} from "./absctract-component";
+import moment from "moment";
 
 export class PopUpFilm extends AbstractComponent {
   constructor({titles, comments, rating, genre, description, img, commentsArray, isWatchlist, isHistory, isFavorite}) {
@@ -150,7 +151,7 @@ export class PopUpFilm extends AbstractComponent {
               <p class="film-details__comment-text">${item.text}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${item.author}</span>
-                <span class="film-details__comment-day">${item.date} days ago</span>
+                <span class="film-details__comment-day">${moment(item.date).startOf('day').fromNow()} </span>
                 <button class="film-details__comment-delete">Delete</button>
               </p>
             </div>

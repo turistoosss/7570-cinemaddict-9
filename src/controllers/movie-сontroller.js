@@ -31,7 +31,7 @@ export class MovieController {
     };
 
 
-    const onOpenPopUp = (dataItem) => {
+    const onOpenPopUp = () => {
       // this._setDefaultView();
 
       console.log(`popUp isHistory ` + this._filmItem.isHistory);
