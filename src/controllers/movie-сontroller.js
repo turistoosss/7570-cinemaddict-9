@@ -2,8 +2,13 @@ import {render, Position, unrender} from "../components/utils";
 import {FilmCard} from "../components/card-template";
 import {PopUpFilm} from "../components/films-details-popup";
 
+const Mode = {
+  ADDING: `adding`,
+  DEFAULT: `default`,
+};
+
 export class MovieController {
-  constructor(container, filmItem, onChangeView, onDataChange, mainArray) {
+  constructor(container, filmItem, onChangeView, onDataChange, mainArray, mode) {
     this._filmList = container;
     this._filmItem = filmItem;
     this._onChangeView = onChangeView;
@@ -12,10 +17,10 @@ export class MovieController {
     this._popUpFilm = new PopUpFilm(filmItem);
     this._mainArray = mainArray;
 
-    this.create();
+    this.create(mode);
   }
 
-  create() {
+  create(mode) {
     const mainContent = document.querySelector(`.main`);
 
     const onEscKeyDown = (evt) => {
@@ -32,8 +37,6 @@ export class MovieController {
 
 
     const onOpenPopUp = () => {
-      // this._setDefaultView();
-
       console.log(`popUp isHistory ` + this._filmItem.isHistory);
 
       render(mainContent, this._popUpFilm.getElement(), Position.BEFOREEND);
@@ -43,8 +46,6 @@ export class MovieController {
 
       if (this._filmItem.isHistory) {
         this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `block`;
-      } else {
-        //this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `none`;
       }
 
       this._popUpFilm.getElement().querySelector(`textarea`)
@@ -77,12 +78,11 @@ export class MovieController {
         });
 
       const commentsArray = [...this._popUpFilm.getElement().querySelectorAll(`.film-details__comment`)];
-      console.log(commentsArray)
+      console.log(commentsArray);
 
       this._popUpFilm.getElement().querySelector(`.film-details__comments-list`)
         .addEventListener(`click`, (evt) => {
           evt.preventDefault();
-          console.log(this._filmItem.commentsArray);
           if (evt.target.className !== `film-details__comment-delete`) {
             return;
           }
@@ -91,18 +91,20 @@ export class MovieController {
           const index = commentsArray.indexOf(parentElemetn);
           this._filmItem.commentsArray = [...this._filmItem.commentsArray.slice(0, index), ...this._filmItem.commentsArray.slice(index + 1)];
 
-          console.log(evt.target.parentElement.parentElement.parentElement);
-          console.log(index);
-          console.log(this._filmItem.commentsArray);
           this._onDataChange(this._mainArray, this._filmItem);
         });
     };
+
 
     this._filmkCard .getElement().querySelector(`.film-card__title`).addEventListener(`click`, onOpenPopUp);
     this._filmkCard .getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onOpenPopUp);
     this._filmkCard .getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onOpenPopUp);
 
-    render(this._filmList, this._filmkCard .getElement(), Position.BEFOREEND);
+    if (mode === `adding`) {
+      onOpenPopUp();
+    } else {
+      render(this._filmList, this._filmkCard .getElement(), Position.BEFOREEND);
+    }
 
     this._filmkCard.getElement().querySelector(`.film-card__controls`)
       .addEventListener(`click`, (evt) => {
@@ -147,10 +149,8 @@ export class MovieController {
             }
 
             console.log(this._mainArray);
-            this._onDataChange(this._mainArray);
-            onOpenPopUp(this._filmItem);
+            this._onDataChange(this._mainArray, this._filmItem);
             break;
-
 
           case `favorite`:
             inputName = `isFavorite`;
@@ -170,7 +170,6 @@ export class MovieController {
     }
     this._setDefaultView();
     this._onDataChange(this._mainArray);
-
   }
 
   _setDefaultView() {

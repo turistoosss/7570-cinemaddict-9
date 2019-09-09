@@ -6,6 +6,10 @@ import {NoFilms} from "../components/no-films";
 import {FilmsMain} from "../components/films-main";
 import {MovieController} from "../controllers/movie-сontroller";
 
+const Mode = {
+  ADDING: `adding`,
+  DEFAULT: `default`,
+};
 export class PageController {
   constructor(container, arrayFilms) {
     this._container = container;
@@ -47,8 +51,8 @@ export class PageController {
     this._mainSort.getElement().addEventListener(`click`, (evt) => this._onSortLinkClick(evt));
   }
 
-  _renderFilm(filmMock, place) {
-    const taskController = new MovieController(place, filmMock, this._onChangeView, this._onDataChange, this._arraySorted);
+  _renderFilm(filmMock, place, Mode) {
+    const taskController = new MovieController(place, filmMock, this._onChangeView, this._onDataChange, this._arraySorted, Mode);
   }
 
   _renderFilmsRow(array, elementFrom, elementTo, place) {
@@ -105,7 +109,9 @@ export class PageController {
     if (popUp) {
       console.log(`contain popUp`);
       unrender(popUp);
-      //this._renderFilm(newData, this._container);
+      console.log(newData);
+      this._renderFilm(newData, this._container, Mode.ADDING);
+
     }
   }
 
