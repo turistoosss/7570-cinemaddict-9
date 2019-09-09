@@ -70,7 +70,7 @@ export class PageController {
     this._subscriptions.forEach((it) => it());
   }
 
-  _onDataChange(array) {
+  _onDataChange(array, newData) {
     const filmsMain = this._filmsWrapper.getElement().querySelector(`.films-list`);
     const filmsWrapper = this._container.querySelectorAll(`.films-list__container`);
     const filmsListExtra = this._container.querySelectorAll(`.films-list--extra`);
@@ -99,6 +99,13 @@ export class PageController {
     this._renderFilmsRow(this._arraySorted, 0, 5, this._filmsList.getElement());
     if (array.length > this._FILM_ROW) {
       this._showMoreButton.getElement().style.display = `block`;
+    }
+
+    const popUp = this._container.querySelector(`.film-details`);
+    if (popUp) {
+      console.log(`contain popUp`);
+      unrender(popUp);
+      //this._renderFilm(newData, this._container);
     }
   }
 
@@ -142,4 +149,6 @@ export class PageController {
       this._showMoreButton.getElement().style.display = `block`;
     }
   }
+
+
 }

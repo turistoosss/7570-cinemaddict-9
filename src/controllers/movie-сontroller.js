@@ -44,7 +44,7 @@ export class MovieController {
       if (this._filmItem.isHistory) {
         this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `block`;
       } else {
-        this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `none`;
+        //this._popUpFilm.getElement().querySelector(`.form-details__middle-container`).style.display = `none`;
       }
 
       this._popUpFilm.getElement().querySelector(`textarea`)
@@ -56,11 +56,9 @@ export class MovieController {
           document.addEventListener(`keydown`, onEscKeyDown);
         });
 
-
       this._popUpFilm.getElement().querySelector(`.film-details__emoji-list`)
         .addEventListener(`click`, (evt) => {
           evt.preventDefault();
-
           if (evt.target.tagName !== `IMG`) {
             return;
           }
@@ -78,7 +76,26 @@ export class MovieController {
           emoji.height = 55;
         });
 
+      const commentsArray = [...this._popUpFilm.getElement().querySelectorAll(`.film-details__comment`)];
+      console.log(commentsArray)
 
+      this._popUpFilm.getElement().querySelector(`.film-details__comments-list`)
+        .addEventListener(`click`, (evt) => {
+          evt.preventDefault();
+          console.log(this._filmItem.commentsArray);
+          if (evt.target.className !== `film-details__comment-delete`) {
+            return;
+          }
+
+          const parentElemetn = evt.target.parentElement.parentElement.parentElement;
+          const index = commentsArray.indexOf(parentElemetn);
+          this._filmItem.commentsArray = [...this._filmItem.commentsArray.slice(0, index), ...this._filmItem.commentsArray.slice(index + 1)];
+
+          console.log(evt.target.parentElement.parentElement.parentElement);
+          console.log(index);
+          console.log(this._filmItem.commentsArray);
+          this._onDataChange(this._mainArray, this._filmItem);
+        });
     };
 
     this._filmkCard .getElement().querySelector(`.film-card__title`).addEventListener(`click`, onOpenPopUp);
@@ -129,9 +146,7 @@ export class MovieController {
               this._filmItem[`isHistory`] = false;
             }
 
-            // console.log( this._filmItem);
             console.log(this._mainArray);
-            // this._onDataChange(this._mainArray);
             this._onDataChange(this._mainArray);
             onOpenPopUp(this._filmItem);
             break;
