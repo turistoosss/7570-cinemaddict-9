@@ -13,7 +13,7 @@ export class MovieController {
     this._filmItem = filmItem;
     this._onChangeView = onChangeView;
     this._onDataChange = onDataChange;
-    this._filmkCard = new FilmCard(filmItem);
+    this._filmCard = new FilmCard(filmItem);
     this._popUpFilm = new PopUpFilm(filmItem);
     this._mainArray = mainArray;
 
@@ -21,12 +21,46 @@ export class MovieController {
   }
 
   create(mode) {
+    let currentView = this._taskView;
     const mainContent = document.querySelector(`.main`);
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
         onCloseClick();
         document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
+
+    const onEnterKeyDown = (evt) => {
+      // && evt.key === `Control`  ?
+      if (evt.key === `Enter`) {
+        const formData = new FormData(this._popUpFilm.getElement().querySelector(`.film-details__inner`));
+
+        const emojiLabel = this._popUpFilm.getElement().querySelector(`.film-details__add-emoji-label`);
+        const commentImg = emojiLabel.querySelector(`img`);
+        let commentSmile;
+
+        if (commentImg) {
+          commentSmile = commentImg.src;
+        }
+
+        const getCommentSmile = (src) => {
+          if (!src) {
+            return ` `;
+          } else {
+            return commentSmile;
+          }
+        };
+
+        const entry = {
+          text: formData.get(`comment`),
+          img: getCommentSmile(commentSmile),
+          date: new Date(),
+          author: `John Doe`
+        };
+
+        this._filmItem.commentsArray.push(entry);
+        this._onDataChange(this._mainArray, this._filmItem);
       }
     };
 
@@ -37,8 +71,6 @@ export class MovieController {
 
 
     const onOpenPopUp = () => {
-      console.log(`popUp isHistory ` + this._filmItem.isHistory);
-
       render(mainContent, this._popUpFilm.getElement(), Position.BEFOREEND);
       document.addEventListener(`keydown`, onEscKeyDown);
 
@@ -51,10 +83,13 @@ export class MovieController {
       this._popUpFilm.getElement().querySelector(`textarea`)
         .addEventListener(`focus`, () => {
           document.removeEventListener(`keydown`, onEscKeyDown);
+          document.addEventListener(`keydown`, onEnterKeyDown);
         });
+
       this._popUpFilm.getElement().querySelector(`textarea`)
         .addEventListener(`blur`, () => {
           document.addEventListener(`keydown`, onEscKeyDown);
+          document.removeEventListener(`keydown`, onEnterKeyDown);
         });
 
       this._popUpFilm.getElement().querySelector(`.film-details__emoji-list`)
@@ -96,17 +131,20 @@ export class MovieController {
     };
 
 
-    this._filmkCard .getElement().querySelector(`.film-card__title`).addEventListener(`click`, onOpenPopUp);
-    this._filmkCard .getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onOpenPopUp);
-    this._filmkCard .getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onOpenPopUp);
+    this._filmCard .getElement().querySelector(`.film-card__title`).addEventListener(`click`, onOpenPopUp);
+    this._filmCard .getElement().querySelector(`.film-card__poster`).addEventListener(`click`, onOpenPopUp);
+    this._filmCard .getElement().querySelector(`.film-card__comments`).addEventListener(`click`, onOpenPopUp);
 
+    //mode = `default`;
     if (mode === `adding`) {
       onOpenPopUp();
-    } else {
-      render(this._filmList, this._filmkCard .getElement(), Position.BEFOREEND);
+    } else if (mode === `default`) {
+      //render(this._filmList, this._filmCard .getElement(), Position.BEFOREEND);
+      render(this._filmList, this._filmCard .getElement(), Position.BEFOREEND);
+
     }
 
-    this._filmkCard.getElement().querySelector(`.film-card__controls`)
+    this._filmCard.getElement().querySelector(`.film-card__controls`)
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
 
@@ -159,7 +197,7 @@ export class MovieController {
         }
 
       });
-    render(this._filmList, this._filmkCard .getElement(), Position.BEFOREEND);
+
   }
 
   _onFilmControlClick(attributeName) {

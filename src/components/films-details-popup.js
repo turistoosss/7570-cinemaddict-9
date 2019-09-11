@@ -151,7 +151,7 @@ export class PopUpFilm extends AbstractComponent {
               <p class="film-details__comment-text">${item.text}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">${item.author}</span>
-                <span class="film-details__comment-day">${moment(item.date).startOf('day').fromNow()} </span>
+                <span class="film-details__comment-day">${moment(item.date).format('YY/MM/DD HH: MM')} </span>
                 <button class="film-details__comment-delete">Delete</button>
               </p>
             </div>

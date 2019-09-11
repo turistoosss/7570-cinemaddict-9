@@ -44,15 +44,15 @@ export class PageController {
     const filmsWrapper = this._container.querySelectorAll(`.films-list__container`);
 
     this._renderFilmsRow(this._arrayFilms, 0, this._FILM_ROW, this._filmsList.getElement());
-    this._renderFilmsRow(this._getFilmsSort(`rating`), 0, 2, filmsWrapper[1]);
-    this._renderFilmsRow(this._getFilmsSort(`comments`), 0, 2, filmsWrapper[2]);
+    this._renderFilmsRow(this._getFilmsSort(`rating`), 0, 2, filmsWrapper[2]);
+    this._renderFilmsRow(this._getFilmsSort(`comments`), 0, 2, filmsWrapper[3]);
 
     this._showMoreButton.getElement().addEventListener(`click`, (evt) => this._onButtonShowMore(evt, this._filmsList.getElement(), this._arraySorted));
     this._mainSort.getElement().addEventListener(`click`, (evt) => this._onSortLinkClick(evt));
   }
 
-  _renderFilm(filmMock, place, Mode) {
-    const taskController = new MovieController(place, filmMock, this._onChangeView, this._onDataChange, this._arraySorted, Mode);
+  _renderFilm(filmMock, place, mode) {
+    const taskController = new MovieController(place, filmMock, this._onChangeView, this._onDataChange, this._arraySorted, mode);
   }
 
   _renderFilmsRow(array, elementFrom, elementTo, place) {
@@ -60,7 +60,7 @@ export class PageController {
     if (!arraySlice.length) {
       render(this._filmsList.getTemplate(), this._noFilms.getElement(), Position.BEFOREEND);
     } else {
-      arraySlice.forEach((filmMock) => this._renderFilm(filmMock, place));
+      arraySlice.forEach((filmMock) => this._renderFilm(filmMock, place, Mode.DEFAULT));
     }
   }
 
@@ -85,7 +85,6 @@ export class PageController {
     wrapperExtraDiv2.classList.add(`films-list__container`);
 
     this._elementFrom = 0;
-    console.log(array);
     unrender(this._filmsList.getElement());
     unrender(filmsWrapper[1]);
     unrender(filmsWrapper[2]);
@@ -109,9 +108,7 @@ export class PageController {
     if (popUp) {
       console.log(`contain popUp`);
       unrender(popUp);
-      console.log(newData);
       this._renderFilm(newData, this._container, Mode.ADDING);
-
     }
   }
 
@@ -155,6 +152,4 @@ export class PageController {
       this._showMoreButton.getElement().style.display = `block`;
     }
   }
-
-
 }

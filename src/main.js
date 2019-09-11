@@ -6,6 +6,9 @@ import {getFilm} from "./components/data";
 import {Footer} from "./components/footer";
 import {PageController} from "./controllers/films-controller";
 import {Statistic} from "./components/statistic";
+import {Result} from "./components/search-result-info";
+import {SearchController} from "./controllers/search-result";
+import {SearchResult} from "./components/search-result";
 
 const siteMainHeader = document.querySelector(`.header`);
 const mainContent = document.querySelector(`.main`);
@@ -33,6 +36,18 @@ const renderHeaderUser = (userFilms) => {
   render(siteMainHeader, search.getElement(), Position.BEFOREEND);
 };
 renderHeaderUser(11);
+
+const renderResult = () => {
+  const result = new Result();
+
+  render(mainContent, result.getElement(), Position.BEFOREEND);
+  result.getElement().classList.add(`visually-hidden`);
+};
+renderResult();
+
+const searchResult = new SearchResult();
+const searchController = new SearchController(mainContent, searchResult.getElement(), dataFilms);
+searchController.init();
 
 const countNavFilms = (attribute) => {
   let countWatchlist = 0;
